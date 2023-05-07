@@ -11,6 +11,8 @@ class TrajectoryCleaner(TrajectoryProcessor):
             maxSpeed,
             minYDisplacement,
             maxXDisplacement,
+            minAcceleration,
+            maxAcceleration,
         ):
         
         super().__init__(colMapper)
@@ -18,6 +20,8 @@ class TrajectoryCleaner(TrajectoryProcessor):
         self.maxSpeed = maxSpeed
         self.minYDisplacement = minYDisplacement
         self.maxXDisplacement = maxXDisplacement
+        self.maxAcceleration = maxAcceleration
+        self.minAcceleration = minAcceleration
 
 
         pass
@@ -25,7 +29,7 @@ class TrajectoryCleaner(TrajectoryProcessor):
     #region outliers
     
 
-    def getOutliersByCol(self, 
+    def getOutliersByCol(self,    #dekhi nai
             summary: pd.DataFrame,
             col: str,
             byIQR=False,
@@ -113,6 +117,38 @@ class TrajectoryCleaner(TrajectoryProcessor):
             else:
                 return outliers.index
 
+    def getOutliersByAcceleration(self,
+            tracksDf:pd.DataFrame, 
+            byIQR=False,
+            returnVals=False
+        ) -> pd.Series:
+
+
+        if byIQR:
+            return self.getMaxOutliersByCol(
+                tracksDf,
+                self.accelerationCol,
+                byIQR=byIQR,
+                returnVals=returnVals
+            )
+            
+
+        else:
+            print(f"using range ({self.minAcceleration}, {self.maxAcceleration})")
+            maxVals = tracksDf[[self.idCol, self.accelerationCol]].groupby([self.idCol]).max()
+            criterion = maxVals[self.accelerationCol].map(
+                lambda val: val < self.minAcceleration or val > self.maxAcceleration)
+
+            outliers = maxVals[criterion]
+
+            if returnVals:
+                return outliers
+            else:
+                return outliers.index
+
+
+    
+
     
     def getOutliersByYDisplacement(self,
             tracksDf:pd.DataFrame, 
@@ -179,6 +215,20 @@ class TrajectoryCleaner(TrajectoryProcessor):
         ) -> pd.DataFrame:
 
         outlierIds = self.getOutliersBySpeed(
+            tracksDf, 
+            byIQR
+        )
+        criterion = tracksDf[self.idCol].map(
+            lambda trackId: trackId not in outlierIds)
+        
+        return tracksDf[criterion].copy()
+
+    def cleanByAcceleration(self, 
+            tracksDf:pd.DataFrame, 
+            byIQR=False,
+        ) -> pd.DataFrame:
+
+        outlierIds = self.getOutliersByAcceleration(
             tracksDf, 
             byIQR
         )

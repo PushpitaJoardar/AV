@@ -7,6 +7,9 @@ class ColMapper:
             xVelCol, 
             yVelCol, 
             speedCol,
+            accelerationCol,
+            xAccCol,
+            yAccCol,
             displacementXCol='displacementX',
             displacementYCol='displacementY',
             localXCol='localX',
@@ -18,7 +21,10 @@ class ColMapper:
         self.yCol = yCol
         self.xVelCol = xVelCol
         self.yVelCol = yVelCol
+        self.xAccCol = xAccCol
+        self.yAccCol = yAccCol
         self.speedCol = speedCol
+        self.accelerationCol = accelerationCol
         self.displacementXCol = displacementXCol
         self.displacementYCol = displacementYCol
 

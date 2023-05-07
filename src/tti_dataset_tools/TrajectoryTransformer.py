@@ -76,6 +76,17 @@ class TrajectoryTransformer(TrajectoryProcessor):
             axis=1
         )
 
+    def deriveAcceleration(self,
+            tracksDf:pd.DataFrame
+        ):
+
+        tracksDf["acceleration"] = tracksDf.apply(
+            lambda row: math.sqrt(row[self.xAccCol] ** 2 + row[self.yAccCol] ** 2),
+            axis=1
+        )
+
+    
+
 
     def deriveDisplacements(self,
             tracksDf:pd.DataFrame
