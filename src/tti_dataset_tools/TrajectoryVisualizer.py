@@ -8,7 +8,6 @@ class TrajectoryVisualizer:
 
     
     def show(self, df: pd.DataFrame, idCol, xCol, yCol, trackIds=None):
-        
         plt.rc('font', size=10)
         # print the length of yCol and xCol
         # print(f"ycol length {len(df[yCol])}")
