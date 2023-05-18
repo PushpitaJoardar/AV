@@ -5,7 +5,8 @@ try:
 except ValueError: # Already removed
     pass
 
-projectFolder = 'C:\\Users\\Zenbook325E\\TTI-dataset-tools\\src'
+projectFolder = '/home/ababil/BUET/AV/May 2023/AV/src'
+# projectFolder = 'C:\\Users\\Zenbook325E\\TTI-dataset-tools\\src'
 # projectFolder = 'D:/AV/DataSetExploration/TTI-dataset-tools/src'
 sys.path.append(str(projectFolder))
 os.chdir(projectFolder)
