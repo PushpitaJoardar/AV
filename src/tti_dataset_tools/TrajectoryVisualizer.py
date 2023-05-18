@@ -48,24 +48,9 @@ class TrajectoryVisualizer:
             
             
         avg_displacement_error = total_diff / len(trackIds)
-        print(f"ADE : {avg_displacement_error}")
+        # print(f"ADE : {avg_displacement_error}")
         
         # Sampling 
-        total_diff = 0
-        trackIdsSampled = trackIds[::10]
-        for trackId in trackIdsSampled:
-            diff = 0
-            trackDf = df[df[idCol] == trackId]
-            plt.plot(trackDf[xCol], trackDf[yCol])
-            firstRow = trackDf.head(1)
-            startPoint = (firstRow[xCol] , firstRow[yCol])
-            for col in trackDf[xCol]:
-                diff += abs(col - startPoint[0].values[0])   
-            plt.plot(endPoint[0], endPoint[1], marker='x')
-            total_diff += (diff / len(trackDf[xCol]))
-            
-        sample_avg_displacement_error = total_diff / len(trackIdsSampled)
-        print(f"ADE Sampled: {sample_avg_displacement_error}")
         
         
         

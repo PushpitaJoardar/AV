@@ -6,15 +6,18 @@ import numpy as np
 
 class TrajectoryADECalculator:
     
+    
     def calculate(self, df: pd.DataFrame, idCol, xCol, yCol, trackIds=None):
-        
+        np.random.seed(0)
         total_diff = 0
         
         if trackIds is None:
             trackIds = df[idCol].unique()
 
 
+        print(f"Track Ids length: {len(trackIds)}")
         for trackId in trackIds:
+            # print(trackId)
             diff = 0
             trackDf = df[df[idCol] == trackId]
             # plt.plot(trackDf[xCol], trackDf[yCol])
@@ -29,7 +32,6 @@ class TrajectoryADECalculator:
             # print(startPoint[0].values[0], startPoint[1].values[0])
             for col in trackDf[xCol]:
                 diff += abs(col - startPoint[0].values[0])   
-            # plt.plot(endPoint[0], endPoint[1], marker='x')
             # diff = abs(endPoint[0].values[0] - startPoint[0].values[0])
             # print(f"diff {diff}")
             total_diff += (diff / len(trackDf[xCol]))
@@ -37,6 +39,28 @@ class TrajectoryADECalculator:
             
         avg_displacement_error = total_diff / len(trackIds)
         print(f"ADE : {avg_displacement_error}")
+        
+        #Sampling 
+        total_diff = 0
+        # sample random 10 rows from trackIds
+        trackIdsSampled = np.random.choice(trackIds, 10)
+        print(f"Track Ids Sampled length: {len(trackIdsSampled)}")
+        for trackId in trackIdsSampled:
+            # print(trackId)
+            diff = 0
+            trackDf = df[df[idCol] == trackId]
+            # plt.plot(trackDf[xCol], trackDf[yCol])
+            firstRow = trackDf.head(1)
+            startPoint = (firstRow[xCol] , firstRow[yCol])
+            for col in trackDf[xCol]:
+                # print(f"{trackId} {col}")
+                diff += abs(col - startPoint[0].values[0])   
+            # plt.plot(endPoint[0], endPoint[1], marker='x')
+            total_diff += (diff / len(trackDf[xCol]))
+            
+        sample_avg_displacement_error = total_diff / len(trackIdsSampled)
+        print(f"ADE Sampled: {sample_avg_displacement_error}")
+        
         
         # # Sampling 
         # total_diff = 0
