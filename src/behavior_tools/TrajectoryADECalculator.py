@@ -14,15 +14,15 @@ class TrajectoryADECalculator:
             trackIds = tracksDf[idCol].unique()
 
 
-        print(f"Track Ids length: {len(trackIds)}")
+        # print(f"Track Ids length: {len(trackIds)}")
         for trackId in trackIds:
             trackDf = tracksDf[tracksDf[idCol] == trackId]
             ade = self.getADE(trackDf=trackDf, idCol=idCol, xCol=xCol, yCol=yCol)
-            total_ade += (ade / len(trackDf[xCol]))
+            total_ade += ade 
             
             
         AADE = total_ade / len(trackIds)
-        print(f"AADE : {AADE}")
+        # print(f"AADE : {AADE}")
         return AADE
 
     
